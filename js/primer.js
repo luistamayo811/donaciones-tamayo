@@ -2,11 +2,21 @@
 /* ==========================================
    DONACIONES TAMAYO
    Archivo: js/primer.js
+   Contador global con Cloudflare D1
 ========================================== */
+
+// ==========================================
+// 1. CONFIGURACIÓN DE LA API
+// ==========================================
+
+const API_URL =
+    "https://donaciones-api.luis-tamayo2104.workers.dev";
+
+let guardandoVoto = false;
 
 
 // ==========================================
-// 1. ELEMENTOS HTML
+// 2. ELEMENTOS HTML
 // ==========================================
 
 const donation = document.getElementById("donation");
@@ -14,26 +24,20 @@ const donationThanks = document.getElementById("donation-thanks");
 
 const donationHidden = document.getElementById("donation-hidden");
 const donationHidden2 = document.getElementById("donation-hidden2");
-
 const donationComplete = document.getElementById("donation-complete");
 
-// Botones de la primera pantalla
 const accept1 = document.getElementById("accept1");
 const decline1 = document.getElementById("decline1");
 
-// Botones de la segunda pantalla
 const accept2 = document.getElementById("accept2");
 const decline2 = document.getElementById("decline2");
 
-// Botones de la tercera pantalla
 const accept3 = document.getElementById("accept3");
 const decline3 = document.getElementById("decline3");
 
-// Botones de reinicio
 const restart = document.getElementById("restart");
 const restartThanks = document.getElementById("restart-thanks");
 
-// Mensajes
 const finalTitle = document.getElementById("final-title");
 const finalMessage = document.getElementById("final-message");
 
@@ -43,21 +47,18 @@ const targetLabel = document.getElementById("target-label");
 const confirmationTitle =
     document.getElementById("confirmation-title");
 
-// Hamburguesa
 const caja = document.getElementById("drag");
 
-// Imagen feliz
 const happyImage = document.getElementById("happy-image");
 const happyFallback = document.getElementById("happy-fallback");
 
 
 // ==========================================
-// 2. VARIABLES
+// 3. VARIABLES
 // ==========================================
 
 let respuestaPendiente = null;
 
-// Variables de arrastre
 let arrastrando = false;
 let pointerActivo = null;
 
@@ -69,7 +70,67 @@ let posicionY = 0;
 
 
 // ==========================================
-// 3. MOSTRAR PANTALLA
+// 4. REGISTRAR VOTO EN CLOUDFLARE
+// ==========================================
+
+async function registrarVoto(respuesta) {
+
+    // Evitar solicitudes simultáneas
+    if (guardandoVoto) return false;
+
+    guardandoVoto = true;
+
+    try {
+
+        const resultado = await fetch(`${API_URL}/vote`, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                respuesta: respuesta
+            }),
+
+            cache: "no-store"
+        });
+
+        if (!resultado.ok) {
+            throw new Error("Error HTTP: " + resultado.status);
+        }
+
+        const datos = await resultado.json();
+
+        if (datos.ok !== true) {
+            throw new Error("El servidor no confirmó el voto");
+        }
+
+        console.log("Respuesta registrada:", respuesta);
+
+        return true;
+
+    } catch (error) {
+
+        console.error("Error al registrar respuesta:", error);
+
+        alert(
+            "No se pudo confirmar el registro. " +
+            "Revisa tu conexión e inténtalo nuevamente."
+        );
+
+        return false;
+
+    } finally {
+
+        guardandoVoto = false;
+    }
+}
+
+
+// ==========================================
+// 5. MOSTRAR PANTALLAS
 // ==========================================
 
 function mostrarPantalla(pantalla) {
@@ -89,7 +150,7 @@ function mostrarPantalla(pantalla) {
 
 
 // ==========================================
-// 4. PANTALLA DE AGRADECIMIENTO
+// 6. MOSTRAR AGRADECIMIENTO
 // ==========================================
 
 function agradecerDonacion() {
@@ -99,81 +160,79 @@ function agradecerDonacion() {
 
 
 // ==========================================
-// 5. PRIMERA PANTALLA
+// 7. PRIMERA PANTALLA
 // ==========================================
 
-// Si selecciona YES:
-// Mostrar directamente el agradecimiento.
+// YES: registrar inmediatamente
 
-accept1.addEventListener("click", () => {
+accept1.addEventListener("click", async () => {
 
-    agradecerDonacion();
+    if (guardandoVoto) return;
 
+    accept1.disabled = true;
+    decline1.disabled = true;
+
+    const registrado = await registrarVoto("yes");
+
+    accept1.disabled = false;
+    decline1.disabled = false;
+
+    if (registrado) {
+        agradecerDonacion();
+    }
 });
 
 
-// Si selecciona NO:
-// Mostrar la segunda pregunta.
+// NO: avanzar sin registrar todavía
 
 decline1.addEventListener("click", () => {
 
-    mostrarPantalla(donationHidden);
+    if (guardandoVoto) return;
 
+    mostrarPantalla(donationHidden);
 });
 
 
 // ==========================================
-// 6. SEGUNDA PANTALLA
+// 8. SEGUNDA PANTALLA
 // ==========================================
 
 function prepararConfirmacion(respuesta) {
 
-    // Guardar respuesta
     respuestaPendiente = respuesta;
 
     const texto = respuesta === "yes"
         ? "YES"
         : "NO";
 
-    // Actualizar título
     confirmationTitle.textContent =
         `Confirma tu respuesta: ${texto}`;
 
-    // Actualizar instrucciones
     targetLabel.textContent = texto;
 
-    // Limpiar mensaje
     dragMessage.textContent = "";
 
-    // Limpiar botones
     limpiarBotones();
-
-    // Centrar hamburguesa
     centrarHamburguesa();
 
-    // Mostrar tercera pantalla
     mostrarPantalla(donationHidden2);
 }
 
 
-// YES en la segunda pantalla
+// YES: pasar a la hamburguesa
 accept2.addEventListener("click", () => {
-
     prepararConfirmacion("yes");
-
 });
 
 
-// NO en la segunda pantalla
+// NO: pasar a la hamburguesa
 decline2.addEventListener("click", () => {
-
     prepararConfirmacion("no");
-
 });
 
 
 // ==========================================
-// 7. OBTENER BOTÓN CORRECTO
+// 9. BOTÓN OBJETIVO
 // ==========================================
 
 function obtenerBotonObjetivo() {
@@ -191,7 +250,7 @@ function obtenerBotonObjetivo() {
 
 
 // ==========================================
-// 8. CENTRAR HAMBURGUESA
+// 10. CENTRAR HAMBURGUESA
 // ==========================================
 
 function centrarHamburguesa() {
@@ -202,13 +261,12 @@ function centrarHamburguesa() {
     caja.style.left = "50%";
     caja.style.top = "50%";
 
-    caja.style.transform =
-        "translate(-50%, -50%)";
+    caja.style.transform = "translate(-50%, -50%)";
 }
 
 
 // ==========================================
-// 9. DETECTAR POSICIÓN DEL BOTÓN
+// 11. DETECTAR BOTÓN
 // ==========================================
 
 function estaSobreBoton(x, y, boton) {
@@ -227,7 +285,7 @@ function estaSobreBoton(x, y, boton) {
 
 
 // ==========================================
-// 10. LIMPIAR BOTONES
+// 12. LIMPIAR BOTONES
 // ==========================================
 
 function limpiarBotones() {
@@ -238,19 +296,35 @@ function limpiarBotones() {
 
 
 // ==========================================
-// 11. CONFIRMAR RESPUESTA
+// 13. CONFIRMAR Y GUARDAR RESPUESTA
 // ==========================================
 
-function confirmarRespuesta() {
+async function confirmarRespuesta() {
 
-    if (respuestaPendiente === "yes") {
+    if (!respuestaPendiente || guardandoVoto) return;
 
-        // Mostrar niño feliz
+    const respuesta = respuestaPendiente;
+
+    dragMessage.textContent = "Guardando respuesta...";
+
+    // Registrar en Cloudflare
+    const registrado = await registrarVoto(respuesta);
+
+    if (!registrado) {
+
+        dragMessage.textContent =
+            "No se pudo confirmar. Inténtalo nuevamente.";
+
+        return;
+    }
+
+    // Mostrar resultado
+    if (respuesta === "yes") {
+
         agradecerDonacion();
 
-    } else if (respuestaPendiente === "no") {
+    } else {
 
-        // Mostrar confirmación negativa
         finalTitle.textContent = "Entendido";
 
         finalMessage.textContent =
@@ -262,7 +336,7 @@ function confirmarRespuesta() {
 
 
 // ==========================================
-// 12. CLIC DIRECTO EN BOTONES
+// 14. CLIC DIRECTO EN BOTONES
 // ==========================================
 
 function mostrarInstruccion() {
@@ -275,98 +349,76 @@ function mostrarInstruccion() {
         `🍔 Arrastra la hamburguesa hasta ${texto}.`;
 }
 
-// No permitir confirmar con clic directo
 accept3.addEventListener("click", mostrarInstruccion);
 decline3.addEventListener("click", mostrarInstruccion);
 
 
 // ==========================================
-// 13. COMENZAR ARRASTRE
+// 15. COMENZAR ARRASTRE
 // ==========================================
 
 caja.addEventListener("pointerdown", (e) => {
 
-    if (arrastrando) return;
-
+    if (arrastrando || guardandoVoto) return;
     if (!respuestaPendiente) return;
 
     arrastrando = true;
-
     pointerActivo = e.pointerId;
 
-    // Guardar posición inicial del puntero
     inicioX = e.clientX;
     inicioY = e.clientY;
 
-    // Capturar puntero
     caja.setPointerCapture(e.pointerId);
 
     dragMessage.textContent = "";
-
 });
 
 
 // ==========================================
-// 14. MOVER HAMBURGUESA
+// 16. MOVER HAMBURGUESA
 // ==========================================
 
 caja.addEventListener("pointermove", (e) => {
 
     if (!arrastrando) return;
+    if (e.pointerId !== pointerActivo) return;
 
-    if (e.pointerId !== pointerActivo) {
-        return;
-    }
-
-    // Movimiento desde el punto inicial
     posicionX = e.clientX - inicioX;
     posicionY = e.clientY - inicioY;
 
-    // Mover hamburguesa
     caja.style.transform =
         `translate(
             calc(-50% + ${posicionX}px),
             calc(-50% + ${posicionY}px)
         )`;
 
-    // Obtener botón correcto
     const boton = obtenerBotonObjetivo();
 
-    // Detectar si estamos sobre el botón
     const sobreBoton = estaSobreBoton(
         e.clientX,
         e.clientY,
         boton
     );
 
-    // Iluminar únicamente el botón correcto
     limpiarBotones();
 
     if (sobreBoton && boton) {
-
         boton.classList.add("drop-hover");
-
     }
-
 });
 
 
 // ==========================================
-// 15. SOLTAR HAMBURGUESA
+// 17. SOLTAR HAMBURGUESA
 // ==========================================
 
 caja.addEventListener("pointerup", (e) => {
 
     if (!arrastrando) return;
+    if (e.pointerId !== pointerActivo) return;
 
-    if (e.pointerId !== pointerActivo) {
-        return;
-    }
-
-    // Obtener botón correcto
     const boton = obtenerBotonObjetivo();
 
-    // Verificar dónde soltó
     const sobreBoton = estaSobreBoton(
         e.clientX,
         e.clientY,
@@ -377,25 +429,22 @@ caja.addEventListener("pointerup", (e) => {
     pointerActivo = null;
 
     limpiarBotones();
-
-    // Regresar hamburguesa al centro
     centrarHamburguesa();
 
     if (sobreBoton) {
 
+        // Guardar solamente al confirmar
         confirmarRespuesta();
 
     } else {
 
         mostrarInstruccion();
-
     }
-
 });
 
 
 // ==========================================
-// 16. CANCELAR ARRASTRE
+// 18. CANCELAR ARRASTRE
 // ==========================================
 
 caja.addEventListener("pointercancel", () => {
@@ -404,17 +453,17 @@ caja.addEventListener("pointercancel", () => {
     pointerActivo = null;
 
     limpiarBotones();
-
     centrarHamburguesa();
-
 });
 
 
 // ==========================================
-// 17. REINICIAR APLICACIÓN
+// 19. REINICIAR APLICACIÓN
 // ==========================================
 
 function reiniciarAplicacion() {
+
+    if (guardandoVoto) return;
 
     respuestaPendiente = null;
 
@@ -424,25 +473,19 @@ function reiniciarAplicacion() {
     dragMessage.textContent = "";
 
     limpiarBotones();
-
     centrarHamburguesa();
 
     mostrarPantalla(donation);
 }
 
-
-// Ambos botones comparten la función
 restart.addEventListener("click", reiniciarAplicacion);
 
 restartThanks.addEventListener("click", reiniciarAplicacion);
 
 
 // ==========================================
-// 18. ALTERNATIVA DE IMAGEN FELIZ
+// 20. IMAGEN FELIZ ALTERNATIVA
 // ==========================================
-
-// Si happy-kid.jpg no existe,
-// se mostrará una carita feliz.
 
 function mostrarImagenAlternativa() {
 
@@ -455,16 +498,14 @@ happyImage.addEventListener(
     mostrarImagenAlternativa
 );
 
-// Detectar si la imagen ya falló al cargar
 if (happyImage.complete && happyImage.naturalWidth === 0) {
     mostrarImagenAlternativa();
 }
 
 
 // ==========================================
-// 19. INICIALIZAR APLICACIÓN
+// 21. INICIALIZACIÓN
 // ==========================================
 
 centrarHamburguesa();
-
 mostrarPantalla(donation);
