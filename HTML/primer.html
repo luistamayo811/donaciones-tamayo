@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Donaciones Tamayo</title>
+
+    <link rel="stylesheet" href="css/primer.css">
+    <script src="js/primer.js" defer></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h1>DONACIONES TAMAYO</h1>
+    </header>
+
+    <main>
+
+        <!-- =====================================
+             PANTALLA 1: PREGUNTA INICIAL
+        ====================================== -->
+
+        <section id="donation" class="donation-card">
+
+            <h2>
+                ¿Te gustaría donar a niños hambrientos?
+            </h2>
+
+            <img
+                src="img/donate-kid.jpg"
+                alt="Niño"
+                class="donation-image"
+            >
+
+            <div class="buttons">
+                <button id="accept1" type="button">Yes</button>
+                <button id="decline1" type="button">No</button>
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             PANTALLA DE AGRADECIMIENTO
+        ====================================== -->
+
+        <section id="donation-thanks"
+                 class="donation-card"
+                 hidden>
+
+            <h2 class="thanks-title">
+                ¡Muchas gracias por tu donación! ❤️
+            </h2>
+
+            <img
+                id="happy-image"
+                src="img/happy.jpg"
+                alt="Niño feliz"
+                class="donation-image"
+            >
+
+            <!-- Alternativa si falta la fotografía -->
+            <div id="happy-fallback" hidden>
+                <span class="happy-emoji">😊❤️</span>
+            </div>
+
+            <p class="thanks-message">
+                ¡Gracias por tu generosidad!
+                Tu ayuda puede hacer una gran diferencia.
+            </p>
+
+            <button id="restart-thanks" type="button">
+                Volver al inicio
+            </button>
+
+        </section>
+
+
+        <!-- =====================================
+             PANTALLA 2: SEGUNDA PREGUNTA
+        ====================================== -->
+
+        <section id="donation-hidden"
+                 class="donation-card"
+                 hidden>
+
+            <h2>
+                ¿Estás seguro de que no quieres donar?
+            </h2>
+
+            <img
+                src="img/crying-kid.jpeg"
+                alt="Niño llorando"
+                class="donation-image"
+            >
+
+            <div class="buttons">
+                <button id="accept2" type="button">Yes</button>
+                <button id="decline2" type="button">No</button>
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             PANTALLA 3: HAMBURGUESA
+        ====================================== -->
+
+        <section id="donation-hidden2"
+                 class="donation-card"
+                 hidden>
+
+            <h2 id="confirmation-title">
+                Confirma tu respuesta
+            </h2>
+
+            <!-- IMAGEN CON HAMBURGUESA CENTRADA -->
+            <div id="drag-area">
+
+                <img
+                    src="img/donate-kid.jpg"
+                    alt="Niño"
+                    class="donation-image"
+                >
+
+                <div id="drag">
+
+                    <img
+                        src="img/burger.png"
+                        alt="Hamburguesa"
+                        draggable="false"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- INSTRUCCIONES -->
+            <p class="drag-instruction">
+
+                🍔 Arrastra la hamburguesa hasta
+                el botón
+
+                <strong id="target-label">NO</strong>
+
+                para confirmar tu respuesta.
+
+            </p>
+
+
+            <!-- BOTONES DE CONFIRMACIÓN -->
+            <div class="buttons">
+
+                <button id="accept3" type="button">
+                    Yes
+                </button>
+
+                <button id="decline3" type="button">
+                    No
+                </button>
+
+            </div>
+
+            <p id="drag-message" aria-live="polite"></p>
+
+        </section>
+
+
+        <!-- =====================================
+             PANTALLA FINAL: RECHAZO
+        ====================================== -->
+
+        <section id="donation-complete"
+                 class="donation-card"
+                 hidden>
+
+            <h2 id="final-title"></h2>
+
+            <p id="final-message"></p>
+
+            <button id="restart" type="button">
+                Volver al inicio
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Gracias por visitar Donaciones Tamayo</p>
+    </footer>
+
+</body>
+</html>
