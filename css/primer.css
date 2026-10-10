@@ -6,7 +6,7 @@
 
 
 /* ==========================================
-   1. ESTILOS GENERALES
+   1. CONFIGURACIÓN GENERAL
 ========================================== */
 
 * {
@@ -18,13 +18,18 @@ html {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
+
     margin: 0;
     padding: 0;
+
+    min-height: 100vh;
 
     background-color: #f3f4f6;
     color: #111827;
 }
+
+/* Ocultar pantallas inactivas */
 
 [hidden] {
     display: none !important;
@@ -36,6 +41,8 @@ body {
 ========================================== */
 
 header {
+    width: 100%;
+
     background-color: rgb(43, 43, 160);
     color: white;
 
@@ -47,18 +54,22 @@ header {
 }
 
 header h1 {
-    font-size: 24px;
-    text-align: center;
     margin: 0;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    text-align: center;
 }
 
 
 /* ==========================================
-   3. MAIN
+   3. CONTENIDO PRINCIPAL
 ========================================== */
 
 main {
     width: 100%;
+
     min-height: calc(100vh - 140px);
 
     display: flex;
@@ -67,22 +78,25 @@ main {
     justify-content: flex-start;
     align-items: center;
 
+    gap: 18px;
+
     padding: 25px 15px 100px;
 }
 
 
 /* ==========================================
-   4. TARJETAS
+   4. TARJETAS DE DONACIÓN
 ========================================== */
 
 .donation-card {
-    background-color: rgb(212, 212, 216);
-    color: rgb(12, 11, 11);
-
     width: 100%;
     max-width: 390px;
 
+    background-color: #d4d4d8;
+    color: #111111;
+
     padding: 20px;
+
     border-radius: 10px;
 
     text-align: center;
@@ -90,6 +104,8 @@ main {
 
 .donation-card h2 {
     font-size: 21px;
+    font-weight: bold;
+
     line-height: 1.4;
 
     margin-top: 0;
@@ -98,9 +114,8 @@ main {
 
 
 /* ==========================================
-   5. IMÁGENES
+   5. IMÁGENES DE DONACIÓN
 ========================================== */
-
 
 .donation-image {
     display: block;
@@ -108,29 +123,40 @@ main {
     width: 100%;
     max-width: 300px;
 
-    /* Mantiene la proporción original */
+    /* Mantener tamaño proporcional */
     height: auto;
 
-    /* No recorta la imagen */
+    /* No recortar la fotografía */
     object-fit: contain;
 
     border-radius: 8px;
-    margin: 0 auto;
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
 /* ==========================================
-   6. BOTONES
+   6. CONTENEDOR DE BOTONES
 ========================================== */
 
 .buttons {
     display: flex;
+
+    flex-direction: row;
+
     justify-content: center;
     align-items: center;
 
     gap: 15px;
+
     margin-top: 20px;
 }
+
+
+/* ==========================================
+   7. ESTILOS DE BOTONES
+========================================== */
 
 button {
     background-color: rgb(43, 43, 160);
@@ -147,8 +173,8 @@ button {
     cursor: pointer;
 
     transition:
-        background-color 0.2s,
-        transform 0.2s;
+        background-color 0.2s ease,
+        transform 0.2s ease;
 }
 
 button:hover {
@@ -159,9 +185,21 @@ button:active {
     transform: scale(0.97);
 }
 
+button:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 3px;
+}
+
+/* Botones deshabilitados mientras guarda */
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 
 /* ==========================================
-   7. BOTÓN NO
+   8. BOTÓN NO - PANTALLA 3
 ========================================== */
 
 #decline3 {
@@ -174,39 +212,52 @@ button:active {
 
 
 /* ==========================================
-   8. IMAGEN CON HAMBURGUESA
+   9. ÁREA DE LA HAMBURGUESA
 ========================================== */
-
 
 #drag-area {
     position: relative;
 
     width: 300px;
     max-width: 100%;
+
     height: 250px;
 
     margin: 0 auto;
+
+    /* Permitir movimiento fuera de la foto */
     overflow: visible;
-}
-
-#drag-area .donation-image {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-
-    object-fit: contain;
-    border-radius: 8px;
 }
 
 
 /* ==========================================
-   9. HAMBURGUESA ARRASTRABLE
+   10. IMAGEN DE FONDO
+========================================== */
+
+#drag-area .donation-image {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   11. HAMBURGUESA ARRASTRABLE
 ========================================== */
 
 #drag {
     position: absolute;
 
-    /* Posición inicial: centro */
+    /* Centro de la imagen */
     top: 50%;
     left: 50%;
 
@@ -216,6 +267,7 @@ button:active {
     height: 100px;
 
     cursor: grab;
+
     user-select: none;
     touch-action: none;
 
@@ -242,7 +294,7 @@ button:active {
 
 
 /* ==========================================
-   10. INSTRUCCIONES
+   12. INSTRUCCIONES DE ARRASTRE
 ========================================== */
 
 .drag-instruction {
@@ -265,11 +317,12 @@ button:active {
 
 .drag-instruction strong {
     color: #dc2626;
+    font-weight: bold;
 }
 
 
 /* ==========================================
-   11. DETECTAR HAMBURGUESA SOBRE BOTÓN
+   13. EFECTO AL ARRASTRAR SOBRE BOTÓN
 ========================================== */
 
 #accept3.drop-hover,
@@ -283,7 +336,7 @@ button:active {
 
 
 /* ==========================================
-   12. MENSAJE DE ARRASTRE
+   14. MENSAJES DEL ARRASTRE
 ========================================== */
 
 #drag-message {
@@ -295,21 +348,25 @@ button:active {
     font-size: 14px;
     font-weight: 500;
 
+    line-height: 1.5;
+
     color: #991b1b;
 }
 
 
 /* ==========================================
-   13. PANTALLA DE AGRADECIMIENTO
+   15. PANTALLA DE AGRADECIMIENTO
 ========================================== */
 
 #donation-thanks {
     text-align: center;
 }
 
-.thanks-title {
+#donation-thanks .thanks-title {
     color: #15803d;
+
     font-size: 24px;
+    font-weight: bold;
 }
 
 .thanks-message {
@@ -329,10 +386,14 @@ button:active {
     background-color: #15803d;
 }
 
-/* Imagen alternativa */
+
+/* ==========================================
+   16. IMAGEN FELIZ ALTERNATIVA
+========================================== */
 
 #happy-fallback {
     padding: 45px 0;
+    text-align: center;
 }
 
 .happy-emoji {
@@ -341,11 +402,16 @@ button:active {
 
 
 /* ==========================================
-   14. PANTALLA FINAL
+   17. PANTALLA FINAL
 ========================================== */
 
 #donation-complete {
     padding: 35px 20px;
+}
+
+#final-title {
+    font-size: 24px;
+    margin-bottom: 15px;
 }
 
 #final-message {
@@ -357,10 +423,148 @@ button:active {
 
 
 /* ==========================================
-   15. FOOTER
+   18. PANEL DE ESTADÍSTICAS
+========================================== */
+
+.vote-stats {
+    width: 100%;
+    max-width: 390px;
+
+    background-color: #ffffff;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.vote-stats h2 {
+    font-size: 20px;
+    font-weight: bold;
+
+    color: #111827;
+
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+
+/* ==========================================
+   19. CONTENEDOR DE CONTADORES
+========================================== */
+
+.vote-stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+
+    width: 100%;
+}
+
+
+/* ==========================================
+   20. CONTADOR YES
+========================================== */
+
+.stat-yes {
+    background-color: #dcfce7;
+    color: #166534;
+
+    border-radius: 10px;
+
+    padding: 20px 10px;
+
+    text-align: center;
+}
+
+.stat-yes h3 {
+    font-size: 16px;
+    font-weight: bold;
+
+    margin: 0 0 10px;
+}
+
+#stats-yes {
+    display: block;
+
+    font-size: 32px;
+    font-weight: bold;
+
+    font-variant-numeric: tabular-nums;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================
+   21. CONTADOR NO
+========================================== */
+
+.stat-no {
+    background-color: #fee2e2;
+    color: #991b1b;
+
+    border-radius: 10px;
+
+    padding: 20px 10px;
+
+    text-align: center;
+}
+
+.stat-no h3 {
+    font-size: 16px;
+    font-weight: bold;
+
+    margin: 0 0 10px;
+}
+
+#stats-no {
+    display: block;
+
+    font-size: 32px;
+    font-weight: bold;
+
+    font-variant-numeric: tabular-nums;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================
+   22. ESTADO DE LA CONEXIÓN
+========================================== */
+
+#stats-message {
+    font-size: 13px;
+    font-weight: 400;
+
+    color: #64748b;
+
+    line-height: 1.5;
+
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   23. FOOTER
 ========================================== */
 
 footer {
+    position: fixed;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
     background-color: rgb(43, 43, 160);
     color: white;
 
@@ -368,23 +572,39 @@ footer {
 
     padding: 15px;
 
-    position: fixed;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-
     z-index: 5;
 }
 
 footer p {
-    margin: 0;
     font-size: 14px;
+    margin: 0;
 }
 
 
 /* ==========================================
-   16. RESPONSIVE MOBILE
+   24. RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 768px) {
+
+    header h1 {
+        font-size: 22px;
+    }
+
+    main {
+        padding: 25px 15px 100px;
+    }
+
+    .donation-card,
+    .vote-stats {
+        max-width: 390px;
+    }
+
+}
+
+
+/* ==========================================
+   25. RESPONSIVE - MOBILE
 ========================================== */
 
 @media (max-width: 480px) {
@@ -399,21 +619,31 @@ footer p {
 
     main {
         padding: 20px 12px 100px;
+
+        gap: 15px;
     }
 
     .donation-card {
         padding: 15px;
+        border-radius: 8px;
     }
 
     .donation-card h2 {
         font-size: 19px;
     }
 
+    /* No recortar imágenes en móvil */
+
     .donation-image {
-        height: 220px;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
 
+    /* Contenedor de hamburguesa */
+
     #drag-area {
+        width: 100%;
         height: 220px;
     }
 
@@ -422,15 +652,97 @@ footer p {
         height: 85px;
     }
 
+    /* Instrucciones */
+
     .drag-instruction {
         font-size: 13px;
     }
 
+    /* Botones */
+
     button {
         padding: 12px 22px;
+        font-size: 15px;
     }
+
+    /* Estadísticas */
+
+    .vote-stats {
+        padding: 15px;
+    }
+
+    .vote-stats h2 {
+        font-size: 18px;
+    }
+
+    .vote-stats-grid {
+        gap: 10px;
+    }
+
+    .stat-yes,
+    .stat-no {
+        padding: 15px 8px;
+    }
+
+    #stats-yes,
+    #stats-no {
+        font-size: 28px;
+    }
+
+    /* Footer */
 
     footer p {
         font-size: 12px;
     }
+}
+
+
+/* ==========================================
+   26. PANTALLAS MUY PEQUEÑAS
+========================================== */
+
+@media (max-width: 340px) {
+
+    header h1 {
+        font-size: 18px;
+    }
+
+    .donation-card h2 {
+        font-size: 17px;
+    }
+
+    #drag {
+        width: 70px;
+        height: 70px;
+    }
+
+    .buttons {
+        gap: 10px;
+    }
+
+    button {
+        padding: 10px 16px;
+    }
+
+    #stats-yes,
+    #stats-no {
+        font-size: 24px;
+    }
+}
+
+
+/* ==========================================
+   27. REDUCIR ANIMACIONES SI SE SOLICITA
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    button {
+        transition: none;
+    }
+
 }
