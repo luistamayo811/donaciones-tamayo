@@ -3,6 +3,10 @@
 <html lang="es">
 
 <head>
+    <!-- =====================================
+         CONFIGURACIÓN GENERAL
+    ====================================== -->
+
     <meta charset="UTF-8">
 
     <meta
@@ -12,35 +16,36 @@
 
     <title>Donaciones Tamayo</title>
 
-    <!-- HOJA DE ESTILOS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="css/primer.css">
 
     <!-- JAVASCRIPT -->
     <script src="js/primer.js" defer></script>
-
 </head>
+
 
 <body>
 
-    <!-- ==========================================
-         HEADER
-    ========================================== -->
+    <!-- =====================================
+         1. ENCABEZADO
+    ====================================== -->
 
     <header>
         <h1>DONACIONES TAMAYO</h1>
     </header>
 
 
-    <!-- ==========================================
-         CONTENIDO PRINCIPAL
-    ========================================== -->
+    <!-- =====================================
+         2. CONTENIDO PRINCIPAL
+    ====================================== -->
 
     <main>
 
 
-        <!-- ======================================
-             PANTALLA 1: PREGUNTA INICIAL
-        ======================================= -->
+        <!-- =====================================
+             PANTALLA 1
+             PREGUNTA INICIAL
+        ====================================== -->
 
         <section
             id="donation"
@@ -51,12 +56,14 @@
                 ¿Te gustaría donar a niños hambrientos?
             </h2>
 
+            <!-- Imagen principal -->
             <img
                 src="img/donate-kid.jpg"
-                alt="Niño"
+                alt="Niño solicitando ayuda"
                 class="donation-image"
             >
 
+            <!-- Botones -->
             <div class="buttons">
 
                 <button
@@ -78,9 +85,10 @@
         </section>
 
 
-        <!-- ======================================
+        <!-- =====================================
              PANTALLA DE AGRADECIMIENTO
-        ======================================= -->
+             CUANDO CONFIRMA YES
+        ====================================== -->
 
         <section
             id="donation-thanks"
@@ -92,7 +100,7 @@
                 ¡Muchas gracias por tu donación! ❤️
             </h2>
 
-            <!-- IMAGEN FELIZ -->
+            <!-- Imagen de niño feliz -->
             <img
                 id="happy-image"
                 src="img/happy.jpg"
@@ -100,7 +108,7 @@
                 class="donation-image"
             >
 
-            <!-- IMAGEN ALTERNATIVA -->
+            <!-- Alternativa si la imagen no existe -->
             <div
                 id="happy-fallback"
                 hidden
@@ -127,9 +135,10 @@
         </section>
 
 
-        <!-- ======================================
-             PANTALLA 2: SEGUNDA PREGUNTA
-        ======================================= -->
+        <!-- =====================================
+             PANTALLA 2
+             SEGUNDA PREGUNTA
+        ====================================== -->
 
         <section
             id="donation-hidden"
@@ -141,12 +150,14 @@
                 ¿Estás seguro de que no quieres donar?
             </h2>
 
+            <!-- Imagen de niño triste -->
             <img
                 src="img/crying-kid.jpeg"
-                alt="Niño llorando"
+                alt="Niño triste"
                 class="donation-image"
             >
 
+            <!-- Botones -->
             <div class="buttons">
 
                 <button
@@ -168,10 +179,10 @@
         </section>
 
 
-        <!-- ======================================
-             PANTALLA 3: CONFIRMACIÓN
-             HAMBURGUESA ARRASTRABLE
-        ======================================= -->
+        <!-- =====================================
+             PANTALLA 3
+             CONFIRMACIÓN CON HAMBURGUESA
+        ====================================== -->
 
         <section
             id="donation-hidden2"
@@ -179,27 +190,31 @@
             hidden
         >
 
+            <!-- Título dinámico -->
             <h2 id="confirmation-title">
                 Confirma tu respuesta
             </h2>
 
 
-            <!-- IMAGEN CON HAMBURGUESA -->
+            <!-- =================================
+                 ÁREA DE LA HAMBURGUESA
+            ================================== -->
+
             <div id="drag-area">
 
-                <!-- IMAGEN PRINCIPAL -->
+                <!-- Imagen de fondo -->
                 <img
                     src="img/donate-kid.jpg"
-                    alt="Niño"
+                    alt="Niño solicitando ayuda"
                     class="donation-image"
                 >
 
-                <!-- HAMBURGUESA ARRASTRABLE -->
+                <!-- Hamburguesa arrastrable -->
                 <div id="drag">
 
                     <img
                         src="img/burger.png"
-                        alt="Hamburguesa"
+                        alt="Hamburguesa arrastrable"
                         draggable="false"
                     >
 
@@ -208,7 +223,10 @@
             </div>
 
 
-            <!-- INSTRUCCIONES -->
+            <!-- =================================
+                 INSTRUCCIONES
+            ================================== -->
+
             <p class="drag-instruction">
 
                 🍔 Arrastra la hamburguesa hasta
@@ -223,7 +241,10 @@
             </p>
 
 
-            <!-- BOTONES DE CONFIRMACIÓN -->
+            <!-- =================================
+                 BOTONES DE CONFIRMACIÓN
+            ================================== -->
+
             <div class="buttons">
 
                 <button
@@ -243,18 +264,20 @@
             </div>
 
 
-            <!-- MENSAJE DE ARRASTRE -->
+            <!-- Mensaje de arrastre -->
             <p
                 id="drag-message"
+                role="status"
                 aria-live="polite"
             ></p>
 
         </section>
 
 
-        <!-- ======================================
-             PANTALLA FINAL: RECHAZO
-        ======================================= -->
+        <!-- =====================================
+             PANTALLA FINAL
+             RESPUESTA NO CONFIRMADA
+        ====================================== -->
 
         <section
             id="donation-complete"
@@ -262,10 +285,13 @@
             hidden
         >
 
+            <!-- Título dinámico -->
             <h2 id="final-title"></h2>
 
+            <!-- Mensaje dinámico -->
             <p id="final-message"></p>
 
+            <!-- Reiniciar -->
             <button
                 id="restart"
                 type="button"
@@ -276,10 +302,10 @@
         </section>
 
 
-        <!-- ======================================
+        <!-- =====================================
              CONTADOR GLOBAL DE VOTOS
              CLOUDFLARE D1
-        ======================================= -->
+        ====================================== -->
 
         <section
             id="vote-stats"
@@ -292,11 +318,14 @@
             </h2>
 
 
-            <!-- CONTENEDOR DE RESULTADOS -->
+            <!-- Contenedor de estadísticas -->
             <div class="vote-stats-grid">
 
 
-                <!-- CONTADOR YES -->
+                <!-- =================================
+                     CONTADOR YES
+                ================================== -->
+
                 <div class="stat-yes">
 
                     <h3>YES</h3>
@@ -308,7 +337,10 @@
                 </div>
 
 
-                <!-- CONTADOR NO -->
+                <!-- =================================
+                     CONTADOR NO
+                ================================== -->
+
                 <div class="stat-no">
 
                     <h3>NO</h3>
@@ -322,7 +354,7 @@
             </div>
 
 
-            <!-- ESTADO DE LA CONEXIÓN -->
+            <!-- Estado de conexión -->
             <p
                 id="stats-message"
                 role="status"
@@ -337,9 +369,9 @@
     </main>
 
 
-    <!-- ==========================================
+    <!-- =====================================
          FOOTER
-    ========================================== -->
+    ====================================== -->
 
     <footer>
 
@@ -350,4 +382,5 @@
     </footer>
 
 </body>
+
 </html>
